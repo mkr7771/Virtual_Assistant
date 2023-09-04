@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Counsellor</title>
+    <link rel="stylesheet" href="../static/style.css">
+    <script src="../static/script.js"></script>
+    <script>
+        window.addEventListener("load", initSSEConversation);
+    </script>
+</head>
+<body>
+    <header>
+        <h1>AI Counsellor</h1>
+    </header>
+    <h2>Welcome to the Voice Assistant</h2>
+
+    {% if current_user %}
+        <p>Welcome, {{ current_user.username }}!</p>
+        <p>Stress Level: {{ current_user.stress_level }}</p>
+        <!-- Add your content here for authenticated users -->
+    {% else %}
+        <p>Please log in to use the Voice Assistant.</p>
+        <a href="/login">Log In</a> | <a href="/register">Register</a>
+    {% endif %}
+
+    <main class="container">
+        {% if current_user %}
+            <button type="button" class="start-button" onclick="startCounselling()">Start</button>
+            <button type="button" class="btn btn-danger" onclick="resetCounselling()">Reset</button>
+        {% else %}
+            <p>Please log in to use the Voice Assistant.</p>
+            <a href="/login">Log In</a> | <a href="/register">Register</a>
+        {% endif %}
+
+        <div class="table-wrapper">
+            <p id="stress-level">Stress Level: {{ current_user.stress_level }}</p>
+            <table id="emotion-table">
+                <thead>
+                    <tr>
+                        <th>Emotion</th>
+                        <th>Percentage</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for emotion, percentage in emotion_percentages.items() %}
+                        <tr>
+                            <td>{{ emotion }}</td>
+                            <td>{{ percentage }}%</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div id="conversation-container">
+            <div id="conversation">
+                <!-- Conversation messages will be displayed here -->
+            </div>
+        </div>
+    </main>
+</body>
+</html>
+
+
