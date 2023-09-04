@@ -22,13 +22,13 @@ class User(db.Model, UserMixin):
         return True  # You can customize this logic based on your application's requirements
 
 class StressLevel(db.Model):
+    __tablename__ = 'stress_level'  # Specify the table name
+
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     stress_level = db.Column(db.String(255), nullable=False)
-    login_time = db.Column(db.DateTime, default=datetime.utcnow)
+    login_time = db.Column(db.DateTime, default=datetime.utcnow)  # Include the login_time field
 
     user = db.relationship('User', backref=db.backref('stress_levels', lazy=True))
 
-    def __init__(self, user_id, stress_level):
-        self.user_id = user_id
-        self.stress_level = stress_level
+

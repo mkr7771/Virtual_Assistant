@@ -3,22 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Counsellor</title>
+    <title>AI Counselor</title>
     <link rel="stylesheet" href="../static/style.css">
-    <script src="../static/script.js"></script>
-    <script>
-        window.addEventListener("load", initSSEConversation);
-    </script>
 </head>
 <body>
+
     <header>
-        <h1>AI Counsellor</h1>
+        <h1>AI Counselor</h1>
     </header>
     <h2>Welcome to the Voice Assistant</h2>
 
     {% if current_user %}
         <p>Welcome, {{ current_user.username }}!</p>
-        <p>Stress Level: {{ current_user.stress_level }}</p>
+
+        <!-- Button to toggle "Previous Records" visibility -->
+        <button type="button" class="toggle-button" onclick="togglePreviousRecords()">Toggle Previous Records</button>
+
+        <div id="previous-records" class="previous-stress-level">
+            <h3>Previous Records</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Stress Level</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for stress_level in stress_levels %}
+                        <tr>
+                            <td>{{ stress_level.login_time.strftime('%Y-%m-%d') }}</td>
+                            <td>{{ stress_level.login_time.strftime('%H:%M:%S') }}</td>
+                            <td>{{ stress_level.stress_level }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
         <!-- Add your content here for authenticated users -->
     {% else %}
         <p>Please log in to use the Voice Assistant.</p>
@@ -35,7 +56,7 @@
         {% endif %}
 
         <div class="table-wrapper">
-            <p id="stress-level">Stress Level: {{ current_user.stress_level }}</p>
+            <p id="stress-level">Stress Level: {{ stress_level }}</p>
             <table id="emotion-table">
                 <thead>
                     <tr>
@@ -53,13 +74,24 @@
                 </tbody>
             </table>
         </div>
-        <div id="conversation-container">
-            <div id="conversation">
-                <!-- Conversation messages will be displayed here -->
-            </div>
+
+        <!-- Add this block of code to display the conversation list -->
+        <div id="conversation">
+            <h3>Conversation:</h3>
+                <ul>
+                    {% for message in conversation %}
+                        <li>
+                            {% if message.AI %}
+                                AI: {{ message.AI }}
+                            {% elif message.User %}
+                                User: {{ message.User }}
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
         </div>
     </main>
+    <script src="../static/script.js"></script>
+
 </body>
 </html>
-
-

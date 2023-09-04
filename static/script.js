@@ -1,19 +1,3 @@
-// ...
-
-function resetCounselling() {
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", "/reset", true);
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            // Reset the emotion table
-            updateEmotionTable({});
-            // Update the stress level
-            updateStressLevel(0); // Pass the stress level value you want to display
-        }
-    };
-    xhr.send();
-}
-
 function updateEmotionTable(emotionPercentages) {
     var tableBody = document.querySelector("#emotion-table tbody");
     tableBody.innerHTML = "";
@@ -31,37 +15,52 @@ function updateStressLevel(stressLevel) {
     stressLevelElement.textContent = stressLevel;
 }
 
-function redirectToLogin() {
-    window.location.href = '/login';
-}
-
 function startCounselling() {
     window.location.href = '/process_route';
 }
 
-function redirectToRegister() {
-    // Redirect the user to the registration page
-    window.location.href = '/register'; // Update this URL to match your registration route
+function resetCounselling() {
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "/reset", true);
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            // Redirect to the login page after resetting
+            window.location.href = '/login';
+        }
+    };
+    xhr.send();
 }
 
-// ... (your existing code)
+const eventSource = new EventSource('/stream');
+const conversationElement = document.getElementById("conversation");
 
-// Call initSSEConversation() when the page loads
-window.addEventListener("load", initSSEConversation);
+eventSource.onmessage = function (event) {
+    const newMessage = event.data.trim();  // Trim any leading/trailing whitespace
+    if (newMessage) {
+        // Append the new message to the conversation list
+        appendMessageToConversation(newMessage);
+    }
+};
 
-// Add a function to update stress level and emotion percentages when the page loads
-window.addEventListener("load", function () {
-    fetch("/process_route")
-        .then(response => response.json())
-        .then(data => {
-            // Update the emotion table
-            updateEmotionTable(data.emotion_percentages);
-            // Update the stress level
-            updateStressLevel(data.stress_level);
-        })
-        .catch(error => {
-            console.error("Error fetching data:", error);
-        });
-});
+function toggleRecords() {
+    const recordsElement = document.querySelector(".previous-stress-level");
+    recordsElement.classList.toggle("expanded");
+}
 
-// ...
+function appendMessageToConversation(message) {
+    const conversationList = document.querySelector("#conversation ul");
+    const messageElement = document.createElement("li");
+    messageElement.classList.add("message");
+
+    messageElement.textContent = message;
+    conversationList.insertBefore(messageElement, conversationList.firstChild);
+}
+
+function togglePreviousRecords() {
+    const previousRecords = document.getElementById("previous-records");
+    if (previousRecords.style.display === "block") {
+        previousRecords.style.display = "none";
+    } else {
+        previousRecords.style.display = "block";
+    }
+}

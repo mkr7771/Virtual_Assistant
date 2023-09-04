@@ -1,7 +1,8 @@
 /* Reset some default styles */
-body, h1, h2, p {
+body, h1, h2, p, ul, li, table, th, td {
     margin: 0;
     padding: 0;
+    list-style: none;
 }
 
 /* Basic page styles */
@@ -25,7 +26,7 @@ header {
 }
 
 /* Buttons */
-.start-button, .btn-danger {
+.start-button, .btn-danger, .toggle-button {
     background-color: #007BFF;
     border: none;
     border-radius: 50px;
@@ -37,7 +38,7 @@ header {
     transition: background-color 0.3s, box-shadow 0.3s;
 }
 
-.start-button:hover, .btn-danger:hover {
+.start-button:hover, .btn-danger:hover, .toggle-button:hover {
     background-color: #0056b3;
     box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.3);
 }
@@ -49,16 +50,19 @@ header {
     padding: 20px;
     box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
     margin-top: 20px;
+    overflow-x: auto; /* Enable horizontal scrolling if necessary */
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
+    border-spacing: 0;
 }
 
 th, td {
     padding: 12px;
     text-align: left;
+    border: 1px solid #ddd;
 }
 
 th {
@@ -66,7 +70,7 @@ th {
 }
 
 /* Conversation */
-#conversation-container {
+.conversation {
     background-color: white;
     border-radius: 10px;
     padding: 20px;
@@ -77,27 +81,68 @@ th {
     height: 300px; /* Limit conversation box height for scrolling */
 }
 
-#conversation {
-    /* Add styles for conversation messages here */
+/* Previous Records */
+.previous-stress-level {
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+    max-width: 600px;
+    overflow-x: auto; /* Enable horizontal scrolling if necessary */
+    display: none; /* Initially hidden */
 }
 
-/* Flash messages */
-.flash-messages {
-    list-style-type: none;
+.previous-stress-level table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+.previous-stress-level th, .previous-stress-level td {
+    padding: 8px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+.previous-stress-level th {
+    background-color: #f2f2f2;
+}
+
+/* Add a toggle button style for the expandable section */
+.toggle-button {
+    background-color: #009933;
+    color: #ffffff;
+    margin-bottom: 10px;
+}
+
+/* Style for message list and individual messages */
+#message-list {
     padding: 0;
+    list-style: none;
 }
 
-.flash-messages li {
-    color: #FF6347; /* Red color for error messages */
-    margin-bottom: 5px;
+.message {
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: #d1d1d1;
+    max-width: 80%;
 }
 
-/* Links */
-a {
-    text-decoration: none;
-    color: #007BFF;
+/* Style for AI and User messages */
+.message.AI {
+    background-color: #007BFF;
+    color: #ffffff;
 }
 
-a:hover {
-    text-decoration: underline;
+.message.User {
+    background-color: #33cc33;
+    color: #ffffff;
+}
+
+/* Style for message timestamp (if applicable) */
+.message .timestamp {
+    font-size: 12px;
+    color: #777;
 }
